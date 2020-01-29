@@ -10,8 +10,8 @@
 #include <time.h>
 #include "stdio.h"
 #include <math.h>
-#include "sim.h"
-#include "norm.h"
+#include "Simulator/sim.h"
+#include "Simulator/norm.h"
 #include <string.h>
 //#include <stdint.h>
 
@@ -51,48 +51,46 @@ void superposition(int qs, FILE *out){
 
 }
 
+void ibm_u3_gate_test(int qs, FILE *out){
+	printf("Qubits = %d\n", qs);	
+	printf("Qubits = %d\n", qs);	
+	printf("Size of double: %ld bytes\n",sizeof(ds_Complex));
+	printf("Size of double: %ld bytes\n",sizeof(double));
+	//printf("SIZE_MAX       = %zu\n", SIZE_MAX);
+	double err = 0.0;
+        ds_Register ds_reg;
+
+	ds_initialize_simulator(0);
+	ds_reg = ds_create_register(qs, err, 0);
+	ds_set_state(ds_reg, 0, 1, 0);
+
+	//ds_u2(ds_reg.state+1, ds_reg.state+0, 0, ds_Pi);
+	//ds_u2_gate(ds_reg.state+1, ds_reg.state+0, 0, ds_Pi);
+	
+
+	//ds_Hadamard(ds_reg, 0, 1);
+
+	//ds_U2(ds_reg, 0, 1, 0, ds_Pi);
+	ds_Hadamard(ds_reg, 0, 1);
+	ds_U1(ds_reg, 0, 1, ds_Pi/2);
+
+	ds_print(ds_reg);
+        ds_destroy_register(ds_reg);
+}
+
 int main(){
     
-    int i,j,k,N, qubit;
+    int qs = 1;
 
     FILE *out=fopen("out.dat","w");
     clock_t start, end;
     double cpu_time_used;
-	for(i=4; i<5;i++){	
-	start = clock();
-	int qs = i;
-	superposition(qs, out);
-    /*
-    for(i=1; i<=30; i++){
-        printf("Qubits = %d\n", i);
-        for(j=1; j<=100; j++){
-        
-            start = clock();
-            initialize_simulator();
-            reg = create_register(i, 0, 0, out);
-            set_state(reg, 0, 1, 0);
-    
-            for(k=0; k<j; k++){
-				//void yrot(Register reg, int q, double theta, int time)
-                //yrot(reg,rand() % i,Pi*uniform(),0);
-				//void Hadamard(Register reg, int q, int time)
 
-                yrot(reg,rand() % i,Pi*uniform(),0);
-            }
-            
-            destroy_register(reg);
-    
-            end = clock();
-            cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-            fprintf(out, "%d, %d, %f\n", i, j, cpu_time_used);
-        }
-    }
-	*/
-    
-	end = clock();
-	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-	fprintf(out, "%d, %f\n", qs, cpu_time_used);
-    }	
+    start = clock();
+    ibm_u3_gate_test(1,out);
+    end = clock();
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+    fprintf(out, "%d, %f\n", qs, cpu_time_used);
     fclose(out);
     return 0;
 }

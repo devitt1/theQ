@@ -74,6 +74,16 @@ void ds_global_error(ds_Register reg);
 void ds_cphase(ds_Register reg, int qcont, int qtarg, double theta, int time);
 void ds_cphases(ds_Register reg, int qcont, int qtarg, double theta, int time);
 void ds_Hadamard(ds_Register reg, int q, int time);
+
+/* IBM physical gates */
+void ds_u3_gate(ds_Complex *zPtr0, ds_Complex *zPtr1, double theta, double phi, double lambda);
+void ds_u2_gate(ds_Complex *zPtr0, ds_Complex *zPtr1, double phi, double lambda);
+void ds_u1_gate(ds_Complex *zPtr0, ds_Complex *zPtr1, double lambda);
+
+void ds_U3(ds_Register reg, int q, int time, double theta, double phi, double lambda);
+void ds_U2(ds_Register reg, int q, int time, double phi, double lambda);
+void ds_U1(ds_Register reg, int q, int time, double lambda);
+
 /* compound operators act left to right : ds_Hcnot == H then ds_cnot */
 void ds_Hcnot(ds_Register reg, int qcont, int qtarg, int time);
 void ds_cnotH(ds_Register reg, int qcont, int qtarg, int time);

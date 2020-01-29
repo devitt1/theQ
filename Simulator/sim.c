@@ -246,6 +246,75 @@ void ds_esigy(ds_Complex *zPtr1, ds_Complex *zPtr2, double theta)
    zPtr2->y = -s*(z1.y) +c*(z2.y);
 }
 
+void ds_u3_gate(ds_Complex *zPtr0, ds_Complex *zPtr1,
+         double theta, double phi, double lambda)
+{
+   double c   = cos(theta/2),       s = sin(theta/2);
+   double cp  = cos(phi),          sp = sin(phi);
+   double cl  = cos(lambda),       sl = sin(lambda);
+   double clp = cos(lambda+phi),  slp = sin(lambda+phi);
+
+   ds_Complex z1 = *zPtr1, z0 = *zPtr0;
+
+   zPtr1->x = s*(cp*z0.x - sp*z0.y) + c*(z1.x*clp - z1.y*slp);
+   zPtr1->y = s*(cp*z0.y + sp*z0.x) + c*(z1.y*clp + z1.x*slp);
+   zPtr0->x = c*z0.x - s*cl*z1.x + s*sl*z1.y;
+   zPtr0->y = c*z0.y - s*cl*z1.y - s*sl*z1.x;
+}
+
+void ds_u2_gate(ds_Complex *zPtr0, ds_Complex *zPtr1,
+         double phi, double lambda)
+{
+   ds_u3_gate(zPtr0, zPtr1, ds_Pi/2.0, phi, lambda);
+}
+
+void ds_u1_gate(ds_Complex *zPtr0, ds_Complex *zPtr1,
+         double lambda)
+{
+   ds_u3_gate(zPtr0, zPtr1, 0, 0, lambda);
+}
+
+void ds_U3(ds_Register reg, int q, int time, double theta, double phi, double lambda)
+{
+   int i, j, k;
+
+   for (i=0; i<reg.nc/2; i++) {
+      ds_one_qubit_indices(i, q, &j, &k);
+      ds_u3_gate(reg.state+j, reg.state+k, theta, phi, lambda);
+   }
+
+   ds_lerr(reg, q, time);
+   reg.steps[q]+=time;
+}
+
+
+	//ds_U2(ds_reg, 0, 1, 0, ds_Pi);
+void ds_U2(ds_Register reg, int q, int time, double phi, double lambda)
+{
+   int i, j, k;
+
+   for (i=0; i<reg.nc/2; i++) {
+      ds_one_qubit_indices(i, q, &j, &k);
+      ds_u2_gate(reg.state+j, reg.state+k, phi, lambda);
+   }
+
+   ds_lerr(reg, q, time);
+   reg.steps[q]+=time;
+}
+
+void ds_U1(ds_Register reg, int q, int time, double lambda)
+{
+   int i, j, k;
+
+   for (i=0; i<reg.nc/2; i++) {
+      ds_one_qubit_indices(i, q, &j, &k);
+      ds_u1_gate(reg.state+j, reg.state+k, lambda);
+   }
+
+   ds_lerr(reg, q, time);
+   reg.steps[q]+=time;
+}
+
 void ds_esigz(ds_Complex *zPtr1, ds_Complex *zPtr2, double theta)
 {
    double c = cos(theta/2), s = sin(theta/2);
@@ -279,7 +348,7 @@ void ds_unitary(ds_Complex *zPtr1, ds_Complex *zPtr2,
    indices to apply the desired transformation to.
    
      returns: nth pair of indices *iPtr and *jPtr, where in state *iPtr
-              qubit q is set and in state *jPtr qubit q is not set
+              qubit q is not set and in state *jPtr qubit q is set
      e.g. for 3 qubits: n=0, q=1 -> *iPtr=0 (000) *jPtr=1 (001)
      e.g. for 3 qubits: n=0, q=2 -> *iPtr=0 (000) *jPtr=2 (010)
      e.g. for 3 qubits: n=1, q=3 -> *iPtr=1 (001) *jPtr=1 (101)
