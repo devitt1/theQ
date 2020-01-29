@@ -15,7 +15,7 @@
 #include <string.h>
 //#include <stdint.h>
 
-void superposition(int qs, FILE *out){
+void bv(int qs, FILE *out){
 	int i;
 	printf("Qubits = %d\n", qs);	
 	printf("Qubits = %d\n", qs);	

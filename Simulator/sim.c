@@ -1105,6 +1105,7 @@ void ds_scnotH(ds_Register reg, int qcont, int qtarg, int time)
    reg.steps[qtarg]+=time;
 }
 
+/*--------------------MORE COMPLEX COMPOUND GATES AND SUBROUTINES: CAN BE IGNORED--------------
 /* Top to bottom input : 43210
  * Top to bottom output : 21403 */
 void ds_qec5en(ds_Register reg, int q4, int q3, int q2, int q1, int q0)
