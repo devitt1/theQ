@@ -7,10 +7,10 @@
 //int ds_seed = 1, ds_b = 314159221;
 //double ds_m = 2.147483648e9;
 
-int ds_srand32(long s)
+void ds_srand32(long s)
 {
    //ds_seed = s;
-   return srand48(s);
+   srand48(s);
 }
 
 /* Generates a pseudo-random integer from -(2^31) to 2^31-1 */
