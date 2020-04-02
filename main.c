@@ -30,7 +30,7 @@ int main(){
         
             start = clock();
             ds_initialize_simulator(0);
-            reg = ds_create_register(i, 0, 0, out);
+            reg = ds_create_register(i, 0, 0);
             ds_set_state(reg, 0, 1, 0);
     
             for(k=0; k<j; k++){
