@@ -10,7 +10,7 @@
 int ds_srand32(long s)
 {
    //ds_seed = s;
-   srand48(s);
+   return srand48(s);
 }
 
 /* Generates a pseudo-random integer from -(2^31) to 2^31-1 */
