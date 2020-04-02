@@ -549,7 +549,7 @@ void ds_XZ(ds_Register reg, int q, int time)
    reg.steps[q]+=time;
 }
 
-void lerr(ds_Register reg, int q, int time)
+void ds_lerr(ds_Register reg, int q, int time)
 {
    int i, j, k;
    double p;
