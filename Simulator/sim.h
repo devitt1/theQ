@@ -26,12 +26,8 @@ void ds_clearreg(ds_Register reg);
 void ds_set_state(ds_Register reg, int n, double x, double y);
 int ds_query_state(ds_Register reg, int n, double tol);
 void ds_print(ds_Register reg);
-void ds_change_err(ds_Register *regPtr, double err_L);
-void ds_change_sigma(ds_Register *regPtr, double sigma_L);
 void ds_update(ds_Register reg, int q1, int q2);
 void ds_global_update(ds_Register reg);
-
-void dosmth(void);
 
 ds_Complex ds_eitheta(double theta);
 ds_Complex ds_add(ds_Complex z1, ds_Complex z2);
@@ -58,13 +54,10 @@ void ds_zrot(ds_Register reg, int q, double theta, int time);
 void ds_X(ds_Register reg, int q, int time);
 void ds_Z(ds_Register reg, int q, int time);
 void ds_XZ(ds_Register reg, int q, int time);
-void ds_lerr(ds_Register reg, int q, int time);
 
 void ds_cnot(ds_Register reg, int qcont, int qtarg, int time);
 void ds_swap(ds_Register reg, int q1, int q2, int time);
-void ds_phase(ds_Register reg, int q, double theta, int time);
 void ds_lerr(ds_Register reg, int q, int time);
-void ds_global_error(ds_Register reg);
 void ds_cphase(ds_Register reg, int qcont, int qtarg, double theta, int time);
 void ds_Hadamard(ds_Register reg, int q, int time);
 

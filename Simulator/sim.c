@@ -99,12 +99,6 @@ int ds_query_state(ds_Register reg, int n, double tol)
    return 0;
 }
 
-void dosmth(){
-    FILE *out=fopen("out.dat","w");
-    fprintf(out, "success from sim.c!");
-    fclose(out);
-}
-
 void ds_print(ds_Register reg)
 {
    int i;
@@ -116,16 +110,6 @@ void ds_print(ds_Register reg)
    fprintf(out, "\n");
    fclose(out);
 
-}
-
-void ds_change_err(ds_Register *regPtr, double err_L)
-{
-   regPtr->err = err_L;
-}
-
-void ds_change_sigma(ds_Register *regPtr, double sigma_L)
-{
-   regPtr->sigma = sigma_L;
 }
 
 void ds_update(ds_Register reg, int q1, int q2)
@@ -624,18 +608,6 @@ void ds_swap(ds_Register reg, int q1, int q2, int time)
 }
 
 /* Kane compatible if |q-x| = 1 */
-void ds_phase(ds_Register reg, int q, double theta, int time)
-{
-   int i, j, k;
-
-   for (i=0; i<reg.nc/2; i++) {
-      ds_one_qubit_indices(i, q, &j, &k);
-      reg.state[k] = ds_multiply(ds_eitheta(theta), reg.state[k]);
-   }
-
-   ds_lerr(reg, q, time);
-   reg.steps[q]+=time;
-}
 
 void ds_cphase(ds_Register reg, int qcont, int qtarg, double theta, int time)
 {
