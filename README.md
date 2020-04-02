@@ -1,5 +1,5 @@
-# devittsim
-State vector simulator by Simon Devitt
+# The Q
+Quantum Computing simulation project, By S.J. Devitt and C. Ferrie at QSI@UTS
 # Build
 On Linux simply: ```gcc main.c Simulator/sim.c Simulator/norm.c -lm -o sim```
 
