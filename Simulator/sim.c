@@ -549,56 +549,38 @@ void ds_XZ(ds_Register reg, int q, int time)
    reg.steps[q]+=time;
 }
 
-/* Change to discrete errors OR continuous */
-void ds_lerr(ds_Register reg, int q, int time)
+void lerr(Register reg, int q, int time)
 {
    int i, j, k;
    double p;
    double delta, alpha, beta, theta;
-   ds_Complex z;
+   Complex z;
 
    if (time == 0) return;
     if (reg.err == 0) return;
 
    if (reg.err > 0) {
-      p = ds_uniform();
-
+      p = uniform();
       if (p < reg.err/3) {
-	 ds_X_no_error(reg, q, 1);
-
-	 //printf("error\n");
-         reg.n_errors[0] += 1;
+	 not(reg, q, 0);
       }
       else if (p < 2*reg.err/3) {
-	 ds_Z_no_error(reg, q, 1);
-
-	 //printf("error\n");
-         reg.n_errors[1] += 1;
+	 Z(reg, q, 0);
       }
       else if (p < reg.err) {
-	 ds_XZ_no_error(reg, q, 1);
-
-	 //printf("error\n");
-         reg.n_errors[2] += 1;
+	 XZ(reg, q, 0);
       }
    }
 
    if (reg.sigma > 0) {
-      alpha = reg.sigma*ds_norm();
-      beta = reg.sigma*ds_norm();
-      theta = reg.sigma*ds_norm();
+      alpha = reg.sigma*norm();
+      beta = reg.sigma*norm();
+      theta = reg.sigma*norm();
          for (i=0; i<reg.nc/2; i++) {
-	 ds_one_qubit_indices(i, q, &j, &k);
-	 ds_unitary(reg.state+j, reg.state+k, alpha, beta, theta);
+	 one_qubit_indices(i, q, &j, &k);
+	 unitary(reg.state+j, reg.state+k, alpha, beta, theta);
 	 }
    }
-}
-
-void ds_global_error(ds_Register reg)
-{
-   int q;
-
-   for (q=0; q<reg.nq; q++) ds_lerr(reg, q, 1);
 }
 
 /* Kane compatible if |qcont-qtarg| = 1 */
