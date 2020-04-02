@@ -19,7 +19,7 @@
 int main(){
     
     int i,j,k,N, qubit;
-    Register reg;
+    ds_Register reg;
     FILE *out=fopen("out.dat","w");
     clock_t start, end;
     double cpu_time_used;
