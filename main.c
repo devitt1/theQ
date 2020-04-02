@@ -29,15 +29,15 @@ int main(){
         for(j=1; j<=100; j++){
         
             start = clock();
-            initialize_simulator();
-            reg = create_register(i, 0, 0, out);
-            set_state(reg, 0, 1, 0);
+            ds_initialize_simulator();
+            reg = ds_create_register(i, 0, 0, out);
+            ds_set_state(reg, 0, 1, 0);
     
             for(k=0; k<j; k++){
                 ds_yrot(reg,rand() % i,Pi*uniform(),0);
             }
             
-            destroy_register(reg);
+            ds_destroy_register(reg);
     
             end = clock();
             cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
