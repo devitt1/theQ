@@ -16,11 +16,7 @@ ds_Register ds_create_register(int nq_L, double err_L, double sigma_L)
    reg.nc = pow(2, nq_L);
    reg.err = err_L;
    reg.sigma = sigma_L;
-   reg.n_errors = (int*) calloc(3,sizeof(int));
-   /*
-   reg.n_errors[0] = 0;
-   reg.n_errors[1] = 0;
-   reg.n_errors[2] = 0;*/
+   
    fprintf(out, "%d qubits!\n",nq_L); 
 
    reg.state = (ds_Complex *)calloc(reg.nc, sizeof(ds_Complex));
