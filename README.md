@@ -1,7 +1,7 @@
 # The Q
 Quantum Computing simulation project, By S.J. Devitt and C. Ferrie at QSI@UTS
 # Build
-On Linux simply: ```gcc main.c Simulator/sim.c Simulator/norm.c -lm -o sim```
+On Linux or Mac simply: ```gcc main.c Simulator/sim.c Simulator/norm.c -lm -o sim```
 
 The following worked on a Windows 10 machine:
 ```
