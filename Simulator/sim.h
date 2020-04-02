@@ -58,7 +58,7 @@ void ds_zrot(ds_Register reg, int q, double theta, int time);
 void ds_X(ds_Register reg, int q, int time);
 void ds_Z(ds_Register reg, int q, int time);
 void ds_XZ(ds_Register reg, int q, int time);
-void lerr(ds_Register reg, int q, int time);
+void ds_lerr(ds_Register reg, int q, int time);
 
 void ds_cnot(ds_Register reg, int qcont, int qtarg, int time);
 void ds_swap(ds_Register reg, int q1, int q2, int time);
