@@ -549,12 +549,12 @@ void ds_XZ(ds_Register reg, int q, int time)
    reg.steps[q]+=time;
 }
 
-void lerr(Register reg, int q, int time)
+void lerr(ds_Register reg, int q, int time)
 {
    int i, j, k;
    double p;
    double delta, alpha, beta, theta;
-   Complex z;
+   ds_Complex z;
 
    if (time == 0) return;
     if (reg.err == 0) return;
