@@ -562,13 +562,13 @@ void lerr(ds_Register reg, int q, int time)
    if (reg.err > 0) {
       p = ds_uniform();
       if (p < reg.err/3) {
-	 not(reg, q, 0);
+	 ds_X(reg, q, 0);
       }
       else if (p < 2*reg.err/3) {
-	 Z(reg, q, 0);
+	 ds_Z(reg, q, 0);
       }
       else if (p < reg.err) {
-	 XZ(reg, q, 0);
+	 ds_XZ(reg, q, 0);
       }
    }
 
