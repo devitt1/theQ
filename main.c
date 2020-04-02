@@ -34,7 +34,7 @@ int main(){
             ds_set_state(reg, 0, 1, 0);
     
             for(k=0; k<j; k++){
-                ds_yrot(reg,rand() % i,ds_Pi*uniform(),0);
+                ds_yrot(reg,rand() % i,ds_Pi*ds_uniform(),0);
             }
             
             ds_destroy_register(reg);
