@@ -573,12 +573,12 @@ void lerr(ds_Register reg, int q, int time)
    }
 
    if (reg.sigma > 0) {
-      alpha = reg.sigma*norm();
-      beta = reg.sigma*norm();
-      theta = reg.sigma*norm();
+      alpha = reg.sigma*ds_norm();
+      beta = reg.sigma*ds_norm();
+      theta = reg.sigma*ds_norm();
          for (i=0; i<reg.nc/2; i++) {
-	 one_qubit_indices(i, q, &j, &k);
-	 unitary(reg.state+j, reg.state+k, alpha, beta, theta);
+	 ds_one_qubit_indices(i, q, &j, &k);
+	 ds_unitary(reg.state+j, reg.state+k, alpha, beta, theta);
 	 }
    }
 }
