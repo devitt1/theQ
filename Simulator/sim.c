@@ -1,3 +1,5 @@
+//Assembly functions are from https://github.com/MrGilli/Quplexity/tree/main, written by Jacob Gill.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -5,7 +7,13 @@
 #include "sim.h"
 #include "norm.h"
 
+extern int _num_pow(int nq_L);
+extern double _esigx01(double c, double s, double z1, double z2);
+extern double _esigx00(double c, double s, double z1, double z2);
+extern double _esigx10(double c, double s, double z1, double z2);
+
 double ds_Pi, ds_Pio2, ds_Pio4, ds_Pio8, ds_root2_2;
+
 
 ds_Register ds_create_register(int nq_L, double err_L, double sigma_L)
 {
@@ -13,11 +21,11 @@ ds_Register ds_create_register(int nq_L, double err_L, double sigma_L)
    FILE *out=fopen("mem_regs.txt","w");
 
    reg.nq = nq_L;
-   reg.nc = pow(2, nq_L);
+   reg.nc = _num_pow(nq_L); //Really basic test function, will be removed later.
    reg.err = err_L;
    reg.sigma = sigma_L;
    
-   fprintf(out, "%d qubits!\n",nq_L); 
+   fprintf(out, "%d qubits!\n", nq_L); 
 
    reg.state = (ds_Complex *)calloc(reg.nc, sizeof(ds_Complex));
    if (reg.state == NULL) {
@@ -65,9 +73,9 @@ void ds_initialize_simulator(long seed)
    //ds_srand32(time(NULL));
    ds_srand32(seed);
 
-   ds_Pi = acos(-1);
-   ds_Pio2 = asin(1);
-   ds_Pio4 = atan(1);
+   ds_Pi = acos(-1);          //Calculate the value of pi using inv acos.
+   ds_Pio2 = asin(1);         //Calculate the value of pi/2 using asin(1).
+   ds_Pio4 = atan(1);         //etc.
    ds_Pio8 = ds_Pio4 / 2;
    ds_root2_2 = 1 / sqrt(2);
 }
@@ -200,30 +208,36 @@ void ds_esigx(ds_Complex *zPtr1, ds_Complex *zPtr2, double theta)
 {
    double c = cos(theta/2), s = sin(theta/2);
    ds_Complex z1 = *zPtr1, z2 = *zPtr2;
-   zPtr1->x =  c*(z1.x) -s*(z2.y);
-   zPtr1->y =  c*(z1.y) +s*(z2.x);
-   zPtr2->x = -s*(z1.y) +c*(z2.x);
-   zPtr2->y =  s*(z1.x) +c*(z2.y);
+
+   //esigx functions defined in ../Quplexity/ARM/math.s
+   zPtr1->x = _esigx01(c, s, z1.x, z2.y);
+   zPtr1->y = _esigx00(c, s, z1.y, z2.x);
+   zPtr2->x = _esigx10(-s, c, z1.y, z2.x);
+   zPtr2->y = _esigx00(s, c, z1.x, z2.y);
 }
 
 void ds_esigy(ds_Complex *zPtr1, ds_Complex *zPtr2, double theta)
 {
    double c = cos(theta/2), s = sin(theta/2);
    ds_Complex z1 = *zPtr1, z2 = *zPtr2;
-   zPtr1->x =  c*(z1.x) +s*(z2.x);
-   zPtr1->y =  c*(z1.y) +s*(z2.y);
-   zPtr2->x = -s*(z1.x) +c*(z2.x);
-   zPtr2->y = -s*(z1.y) +c*(z2.y);
+
+   //esigx functions defined in ../Quplexity/ARM/math.s
+   zPtr1->x = _esigx00(c, s, z1.x, z2.x);
+   zPtr1->y = _esigx00(c, s, z1.y, z2.y);
+   zPtr2->x = _esigx10(-s, c, z1.x, z2.x);
+   zPtr2->y = _esigx10(-s, c, z1.y, z2.y);
 }
 
 void ds_esigz(ds_Complex *zPtr1, ds_Complex *zPtr2, double theta)
 {
    double c = cos(theta/2), s = sin(theta/2);
    ds_Complex z1 = *zPtr1, z2 = *zPtr2;
-   zPtr1->x =  c*(z1.x) -s*(z1.y);
-   zPtr1->y =  c*(z1.y) +s*(z1.x);
-   zPtr2->x =  c*(z2.x) +s*(z2.y);
-   zPtr2->y =  c*(z2.y) -s*(z2.x);
+
+   //esigx functions defined in ../Quplexity/ARM/math.s
+   zPtr1->x =  _esigx01(c, -s, z1.x, z1.y);
+   zPtr1->y =  _esigx00(c, s, z1.y, z1.x);
+   zPtr2->x =  _esigx00(c, s, z2.x, z2.y);
+   zPtr2->y =  _esigx01(c, -s, z2.y, z2.x);
 }
 
 void ds_unitary(ds_Complex *zPtr1, ds_Complex *zPtr2,
@@ -236,6 +250,7 @@ void ds_unitary(ds_Complex *zPtr1, ds_Complex *zPtr2,
    double s12 = sin(+alpha/2-beta/2);
    ds_Complex z1 = *zPtr1, z2 = *zPtr2;
 
+   //Will add ASM for this next.
    zPtr1->x =  c*(c11*z1.x-s11*z1.y) + s*(c12*z2.x-s12*z2.y);
    zPtr1->y =  c*(c11*z1.y+s11*z1.x) + s*(c12*z2.y+s12*z2.x);
    zPtr2->x = -s*(c12*z1.x+s12*z1.y) + c*(c11*z2.x+s11*z2.y);
