@@ -7,10 +7,9 @@
 #include "sim.h"
 #include "norm.h"
 
-extern int _num_pow(int nq_L);
-extern double _esigx01(double c, double s, double z1, double z2);
-extern double _esigx00(double c, double s, double z1, double z2);
-extern double _esigx10(double c, double s, double z1, double z2);
+extern double esigx01(double c, double s, double z1, double z2);
+extern double esigx00(double c, double s, double z1, double z2);
+extern double esigx10(double c, double s, double z1, double z2);
 
 double ds_Pi, ds_Pio2, ds_Pio4, ds_Pio8, ds_root2_2;
 
@@ -21,7 +20,7 @@ ds_Register ds_create_register(int nq_L, double err_L, double sigma_L)
    FILE *out=fopen("mem_regs.txt","w");
 
    reg.nq = nq_L;
-   reg.nc = _num_pow(nq_L); //Really basic test function, will be removed later.
+   reg.nc = pow(2, nq_L); //Really basic test function, will be removed later.
    reg.err = err_L;
    reg.sigma = sigma_L;
    
@@ -210,10 +209,10 @@ void ds_esigx(ds_Complex *zPtr1, ds_Complex *zPtr2, double theta)
    ds_Complex z1 = *zPtr1, z2 = *zPtr2;
 
    //esigx functions defined in ../Quplexity/ARM/math.s
-   zPtr1->x = _esigx01(c, s, z1.x, z2.y);
-   zPtr1->y = _esigx00(c, s, z1.y, z2.x);
-   zPtr2->x = _esigx10(-s, c, z1.y, z2.x);
-   zPtr2->y = _esigx00(s, c, z1.x, z2.y);
+   zPtr1->x = esigx01(c, s, z1.x, z2.y);
+   zPtr1->y = esigx00(c, s, z1.y, z2.x);
+   zPtr2->x = esigx10(-s, c, z1.y, z2.x);
+   zPtr2->y = esigx00(s, c, z1.x, z2.y);
 }
 
 void ds_esigy(ds_Complex *zPtr1, ds_Complex *zPtr2, double theta)
@@ -222,10 +221,10 @@ void ds_esigy(ds_Complex *zPtr1, ds_Complex *zPtr2, double theta)
    ds_Complex z1 = *zPtr1, z2 = *zPtr2;
 
    //esigx functions defined in ../Quplexity/ARM/math.s
-   zPtr1->x = _esigx00(c, s, z1.x, z2.x);
-   zPtr1->y = _esigx00(c, s, z1.y, z2.y);
-   zPtr2->x = _esigx10(-s, c, z1.x, z2.x);
-   zPtr2->y = _esigx10(-s, c, z1.y, z2.y);
+   zPtr1->x = esigx00(c, s, z1.x, z2.x);
+   zPtr1->y = esigx00(c, s, z1.y, z2.y);
+   zPtr2->x = esigx10(-s, c, z1.x, z2.x);
+   zPtr2->y = esigx10(-s, c, z1.y, z2.y);
 }
 
 void ds_esigz(ds_Complex *zPtr1, ds_Complex *zPtr2, double theta)
@@ -234,10 +233,10 @@ void ds_esigz(ds_Complex *zPtr1, ds_Complex *zPtr2, double theta)
    ds_Complex z1 = *zPtr1, z2 = *zPtr2;
 
    //esigx functions defined in ../Quplexity/ARM/math.s
-   zPtr1->x =  _esigx01(c, -s, z1.x, z1.y);
-   zPtr1->y =  _esigx00(c, s, z1.y, z1.x);
-   zPtr2->x =  _esigx00(c, s, z2.x, z2.y);
-   zPtr2->y =  _esigx01(c, -s, z2.y, z2.x);
+   zPtr1->x =  esigx01(c, -s, z1.x, z1.y);
+   zPtr1->y =  esigx00(c, s, z1.y, z1.x);
+   zPtr2->x =  esigx00(c, s, z2.x, z2.y);
+   zPtr2->y =  esigx01(c, -s, z2.y, z2.x);
 }
 
 void ds_unitary(ds_Complex *zPtr1, ds_Complex *zPtr2,
