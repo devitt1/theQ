@@ -23,12 +23,12 @@ int main(){
     FILE *out=fopen("out.dat","w");
     clock_t start, end;
     double cpu_time_used;
-    
-    for(i=1; i<=30; i++){
+    start = clock();
+    for(i=1; i<=10; i++){
         printf("Qubits = %d\n", i);
         for(j=1; j<=100; j++){
         
-            start = clock();
+            
             ds_initialize_simulator(0);
             reg = ds_create_register(i, 0, 0);
             ds_set_state(reg, 0, 1, 0);
@@ -38,16 +38,13 @@ int main(){
             }
             
             ds_destroy_register(reg);
-    
-            end = clock();
-            cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-            fprintf(out, "%d, %d, %f\n", i, j, cpu_time_used);
         }
     }
-    
     fclose(out);
+    end = clock();
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+    fprintf(out, "%d, %d, %f\n", i, j, cpu_time_used);
     return 0;
-
 }
 
 ;
